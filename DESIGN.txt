@@ -1,0 +1,8 @@
+Most of my methods left in functions have no calls to other classes. For example,
++processImageLine() +getImages() +setAlpha() +load() +parseSapling() +parseDude() +parseFairy()
++parseTree() +parseObstacle() +parseHouse() +parseStump() +parseSaveFile() +parseBackgroundRow() +parseEntity()
+are all private so they only are used by each other in the functions file. The exceptions are,
++loadImages() and load(). These were left in the Functions class because they both use imageStore as a class.
+
+I decided to leave getCurrentImage in WorldModel instead because I felt as if the other methods would be better
+suited in that class so I decided to not make getters and setters for one method and just move it with the others.
