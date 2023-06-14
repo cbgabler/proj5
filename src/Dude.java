@@ -3,12 +3,13 @@ import java.util.List;
 
 abstract public class Dude extends EntityScheduling{
     public static final String DUDE_KEY = "dude";
-    public static final int DUDE_ACTION_PERIOD = 0;
-    public static final int DUDE_ANIMATION_PERIOD = 1;
+    public static final int DUDE_HEALTH = 3;
+    public static final double DUDE_ACTION_PERIOD = 0;
+    public static final double DUDE_ANIMATION_PERIOD = 1;
     public static final int DUDE_LIMIT = 2;
     public static final int DUDE_NUM_PROPERTIES = 3;
     public static final String ALIEN_KEY = "alien";
-    public static final int ALIEN_ACTION_PERIOD = 2;
+    public static final int ALIEN_ACTION_PERIOD = 1;
     public static final int ALIEN_ANIMATION_PERIOD = 1;
     protected int resourceLimit;
     protected int resourceCount;
@@ -18,7 +19,7 @@ abstract public class Dude extends EntityScheduling{
     {
         super(id,position,images,actionPeriod,animationPeriod);
         this.resourceLimit = resourceLimit;
-        this.resourceCount = resourceCount;;
+        this.resourceCount = resourceCount;
     }
 
     public int getResourceLimit(){return resourceLimit;}
@@ -30,7 +31,7 @@ abstract public class Dude extends EntityScheduling{
 
     public static void parseDude(WorldModel world, String[] properties, Point pt, String id, ImageStore imageStore) {
         if (properties.length == DUDE_NUM_PROPERTIES) {
-            Entity entity = new DudeNotFull(id, pt, imageStore.getImageList(DUDE_KEY), Double.parseDouble(properties[DUDE_ACTION_PERIOD]), Double.parseDouble(properties[DUDE_ANIMATION_PERIOD]), Integer.parseInt(properties[DUDE_LIMIT]), 0);
+            Entity entity = new DudeNotFull(id, pt, imageStore.getImageList(DUDE_KEY), Double.parseDouble(properties[(int) DUDE_ACTION_PERIOD]), Double.parseDouble(properties[(int) DUDE_ANIMATION_PERIOD]), Integer.parseInt(properties[DUDE_LIMIT]), 0, 3);
             world.tryAddEntity(world, entity);
         } else {
             throw new IllegalArgumentException(String.format("%s requires %d properties when parsing", DUDE_KEY, DUDE_NUM_PROPERTIES));

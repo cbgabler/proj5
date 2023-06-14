@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 
-public class AlienNotFull extends Dude{
+public class AlienNotFull extends Dude implements Transformed{
     public AlienNotFull(String id, Point position,
                      double actionPeriod, double animationPeriod, int resourceLimit, int resourceCount, List<PImage> images)
     {
@@ -13,10 +13,11 @@ public class AlienNotFull extends Dude{
     }
 
     public void executeActivity(Entity entity, WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
-        Optional<Entity> fullTarget = world.findNearest(entity.getPosition(), new ArrayList<>(List.of(UFO.class)));
+        Optional<Entity> fullTarget = world.findNearest(entity.getPosition(), new ArrayList<>(List.of(DudeNotFull.class, DudeFull.class)));
 
         if (fullTarget.isPresent() && moveTo(world, fullTarget.get(), scheduler)) {
             transform(world, scheduler, imageStore);
+
         } else {
             scheduler.scheduleEvent(entity, createActivityAction(world, imageStore), this.getActionPeriod());
         }
@@ -56,10 +57,22 @@ public class AlienNotFull extends Dude{
     }
 
     public boolean moveTo(WorldModel world, Entity target, EventScheduler scheduler) {
-        if (this.getPosition().adjacent(target.getPosition())) {
-            return true;
+        if (getPosition().adjacent(target.getPosition())) {
+            this.resourceCount += 1;
+            if (target instanceof DudeFull) {
+                DudeFull dudeFull = (DudeFull) target;
+                dudeFull.subHealth();
+                return true;
+            }
+
+            if (target instanceof DudeNotFull) {
+                DudeNotFull dudeNotFull = (DudeNotFull) target;
+                dudeNotFull.subHealth();
+                return true;
+            }
+            return false;
         } else {
-            Point nextPos = this.nextPosition(world, target.getPosition());
+            Point nextPos = nextPosition(world, target.getPosition());
 
             if (!this.getPosition().equals(nextPos)) {
                 world.moveEntity(scheduler, this, nextPos);
@@ -67,5 +80,6 @@ public class AlienNotFull extends Dude{
             return false;
         }
     }
+
 
 }

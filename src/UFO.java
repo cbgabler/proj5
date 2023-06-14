@@ -5,24 +5,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 
-public class UFO extends EntityScheduling {
+public class UFO extends OneCycleAnimations {
     public static final String UFO_KEY = "ufo";
     public static final int UFO_ANIMATION_PERIOD = 0;
     public static final int UFO_ACTION_PERIOD = 1;
     public static final int UFO_NUM_PROPERTIES = 2;
-    private int animationCompleted;
 
-    public UFO(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod) {
-        super(id, position, images, actionPeriod, animationPeriod);
-        this.animationCompleted = 0;
+    public UFO(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod, int animationCompleted) {
+        super(id, position, images, actionPeriod, animationPeriod, animationCompleted);
     }
 
     public void executeActivity(Entity entity, WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
-        if (animationCompleted != 4) {
+        if (this.getAnimationCompleted() != 4) {
             scheduler.scheduleEvent(this, createActivityAction(world, imageStore), this.getAnimationPeriod());
-            animationCompleted++;
+            addAnimationCompleted();
         } else {
             scheduler.unscheduleAllEvents(this);
+            AlienNotFull alien = new AlienNotFull(Dude.ALIEN_KEY, this.getPosition(), Dude.ALIEN_ACTION_PERIOD,
+                    Dude.ALIEN_ANIMATION_PERIOD, 1, 0, imageStore.getImageList(Dude.ALIEN_KEY));
+            world.addEntity(alien);
+            alien.scheduleActions(scheduler, world, imageStore);
         }
     }
 

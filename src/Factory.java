@@ -31,15 +31,6 @@ public class Factory {
         return new Fairy(id, position, images, actionPeriod, animationPeriod);
     }
 
-    // need resource count, though it always starts at 0
-    public static DudeNotFull createDudeNotFull(String id, Point position, double actionPeriod, double animationPeriod, int resourceLimit, List<PImage> images) {
-        return new DudeNotFull(id, position, images, actionPeriod, animationPeriod, resourceLimit, 0);
-    }
-
-    public static DudeFull createDudeFull(String id, Point position, double actionPeriod, double animationPeriod, int resourceLimit, List<PImage> images) {
-        return new DudeFull(id, position, actionPeriod, animationPeriod,  resourceLimit, 0, images);
-    }
-
     public static AlienNotFull createAlienNotFull(String id, Point position, double actionPeriod, double animationPeriod, int resourceLimit, List<PImage> images) {
         return new AlienNotFull(id, position, actionPeriod, animationPeriod, resourceLimit, 0, images);
     }
@@ -49,6 +40,10 @@ public class Factory {
     }
 
     public static UFO createUFO(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod) {
-        return new UFO(id, position, images, actionPeriod, animationPeriod);
+        return new UFO(id, position, images, actionPeriod, animationPeriod, 0);
+    }
+
+    public static Brain createBrain(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod) {
+        return new Brain(id, position, images, actionPeriod, animationPeriod, 0);
     }
 }

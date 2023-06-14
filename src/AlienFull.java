@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 
-public class AlienFull extends Dude{
+public class AlienFull extends Dude implements Transformed{
     public AlienFull(String id, Point position,
                      double actionPeriod, double animationPeriod, int resourceLimit, int resourceCount, List<PImage> images)
     {

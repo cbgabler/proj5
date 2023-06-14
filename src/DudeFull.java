@@ -6,10 +6,12 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 
 public class DudeFull extends Dude implements Transformed{
+    private int health;
     public DudeFull(String id, Point position,
-                      double actionPeriod, double animationPeriod, int resourceLimit, int resourceCount, List<PImage> images)
+                      double actionPeriod, double animationPeriod, int resourceLimit, int resourceCount, List<PImage> images, int health)
     {
         super(id, position, images, actionPeriod, animationPeriod, resourceLimit, resourceCount);
+        this.health = health;
     }
 
     public void executeActivity(Entity entity, WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
@@ -23,8 +25,16 @@ public class DudeFull extends Dude implements Transformed{
     }
 
     public boolean transform(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
-        DudeNotFull dude = Factory.createDudeNotFull(this.getId(), this.getPosition(),
-                this.getActionPeriod(), this.getAnimationPeriod(), this.resourceLimit, this.getImages());
+        if (this.health <= 0){
+            Entity brain = new Brain(Brain.BRAIN_KEY + "_" + this.getId(), this.getPosition(),
+                    imageStore.getImageList(Brain.BRAIN_KEY), Brain.BRAIN_ACTION_PERIOD, Brain.BRAIN_ANIMATION_PERIOD,
+                    0);
+            world.removeEntity(scheduler, this);
+            world.addEntity(brain);
+            return true;
+        } else {
+        DudeNotFull dude = new DudeNotFull(this.getId(), this.getPosition(), this.getImages(),
+                this.getActionPeriod(), this.getAnimationPeriod(), this.resourceLimit, 0, this.health);
 
         world.removeEntity(scheduler, this);
 
@@ -32,6 +42,7 @@ public class DudeFull extends Dude implements Transformed{
         dude.scheduleActions(scheduler, world, imageStore);
         return true;
     }
+        }
 
     public Point nextPosition(WorldModel world, Point destPos) {
         AStarPathingStrategy pathingStrategy = new AStarPathingStrategy();
@@ -66,5 +77,13 @@ public class DudeFull extends Dude implements Transformed{
             }
             return false;
         }
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void subHealth() {
+        this.health--;
     }
 }
