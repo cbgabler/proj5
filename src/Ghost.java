@@ -7,7 +7,7 @@ import java.util.function.BiPredicate;
 
 public class Ghost extends EntityScheduling{
     public static final String GHOST_KEY = "ghost";
-    public static final double GHOST_ANIMATION_PERIOD = .3;
+    public static final double GHOST_ANIMATION_PERIOD = .2;
     public static final double GHOST_ACTION_PERIOD = 1;
     public Ghost(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod) {
         super(id, position, images, actionPeriod, animationPeriod);
@@ -16,12 +16,16 @@ public class Ghost extends EntityScheduling{
     public void executeActivity(Entity entity, WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         Optional<Entity> ghostTarget = world.findNearest(entity.getPosition(), new ArrayList<>(List.of(Brain.class)));
 
+        if (ghostTarget.isEmpty()){
+            world.removeEntity(scheduler, this);
+        }
+
         if (ghostTarget.isPresent()) {
             Point tgtPos = ghostTarget.get().getPosition();
 
             if (moveTo(world, ghostTarget.get(), scheduler)) {
-
-                DudeNotFull dude = new DudeNotFull(Dude.DUDE_KEY + "_" + ghostTarget.get().getId(), tgtPos, imageStore.getImageList(Dude.DUDE_KEY), .5, Dude.DUDE_ANIMATION_PERIOD, Dude.DUDE_LIMIT, 0, Dude.DUDE_HEALTH);
+                world.removeEntity(scheduler, ghostTarget.get());
+                DudeNotFull dude = new DudeNotFull(Dude.DUDE_KEY + "_" + ghostTarget.get().getId(), tgtPos, imageStore.getImageList(Dude.DUDE_KEY), this.getActionPeriod(), this.getAnimationPeriod(), Dude.DUDE_LIMIT, 0, Dude.DUDE_HEALTH);
 
                 world.addEntity(dude);
                 dude.scheduleActions(scheduler, world, imageStore);

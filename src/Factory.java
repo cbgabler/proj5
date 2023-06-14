@@ -13,8 +13,8 @@ public class Factory {
         return new Obstacle(id, position, images, 0, animationPeriod);
     }
 
-    public static Tree createTree(String id, Point position, double actionPeriod, double animationPeriod, int health, List<PImage> images) {
-        return new Tree(id, position, images, actionPeriod, animationPeriod, health);
+    public static Tree createTree(String id, Point position, double actionPeriod, double animationPeriod, int health, List<PImage> images, int healthLimit) {
+        return new Tree(id, position, images, actionPeriod, animationPeriod, health, healthLimit);
     }
 
     public static Stump createStump(String id, Point position, List<PImage> images) {

@@ -88,6 +88,10 @@ public final class VirtualWorld extends PApplet {
             for (int i = row - 1; i <= row + 1; i++) {
                 for (int j = col - 1; j <= col + 1; j++) {
                     Point pt = new Point(j, i);
+
+                    if (!world.withinBounds(pt)) {
+                        continue;
+                    }
                     world.setBackgroundCell(pt, new Background("rock", imageStore.getImageList("rock")));
                     if (world.withinBounds(pt)) {
                         if (world.isOccupied(pt) && (world.getOccupancyCell(pt) instanceof Dude || world.getOccupancyCell(pt) instanceof Fairy)) {

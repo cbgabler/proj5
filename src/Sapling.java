@@ -3,9 +3,8 @@ import processing.core.PImage;
 import java.util.List;
 import java.util.Random;
 
-public class Sapling extends EntityScheduling implements Transformed{
+public class Sapling extends Plant implements Transformed{
     private int health;
-    private int healthLimit;
     public static final double TREE_ANIMATION_MAX = 0.600;
     public static final double TREE_ANIMATION_MIN = 0.050;
     public static final double TREE_ACTION_MAX = 1.400;
@@ -18,9 +17,7 @@ public class Sapling extends EntityScheduling implements Transformed{
 
 
     public Sapling(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod, int health, int healthLimit){
-        super(id, position, images, actionPeriod, animationPeriod);
-        this.health=health;
-        this.healthLimit=healthLimit;
+        super(id, position, images, actionPeriod, animationPeriod, health, healthLimit);
     }
 
     public boolean transform(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
@@ -32,8 +29,8 @@ public class Sapling extends EntityScheduling implements Transformed{
             world.addEntity(stump);
 
             return true;
-        } else if (this.health >= this.healthLimit) {
-            Tree tree = Factory.createTree(Tree.TREE_KEY + "_" + this.getId(), this.getPosition(), getNumFromRange(TREE_ACTION_MAX, TREE_ACTION_MIN), getNumFromRange(TREE_ANIMATION_MAX, TREE_ANIMATION_MIN), getIntFromRange(TREE_HEALTH_MAX, TREE_HEALTH_MIN), imageStore.getImageList(Tree.TREE_KEY));
+        } else if (this.health >= this.getHealthLimit()) {
+            Tree tree = Factory.createTree(Tree.TREE_KEY + "_" + this.getId(), this.getPosition(), getNumFromRange(TREE_ACTION_MAX, TREE_ACTION_MIN), getNumFromRange(TREE_ANIMATION_MAX, TREE_ANIMATION_MIN), getIntFromRange(TREE_HEALTH_MAX, TREE_HEALTH_MIN), imageStore.getImageList(Tree.TREE_KEY), TREE_HEALTH_MAX);
 
             world.removeEntity(scheduler, this);
 
@@ -73,6 +70,6 @@ public class Sapling extends EntityScheduling implements Transformed{
         }
     }
     public void subHealth() {
-        this.health--;
+        this.setHealth(this.getHealth() - 1);
     }
 }
