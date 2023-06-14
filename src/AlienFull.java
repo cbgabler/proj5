@@ -14,6 +14,10 @@ public class AlienFull extends Alien implements Transformed{
 
     public void executeActivity(Entity entity, WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         Optional<Entity> fullTarget = world.findNearest(entity.getPosition(), new ArrayList<>(List.of(UFO.class)));
+        Optional<Entity> ghosts = world.findNearest(this.getPosition(), new ArrayList<>(List.of(Ghost.class)));
+        if (ghosts.isPresent()){
+            this.transformScared(world, scheduler, imageStore);
+        }
 
         if (fullTarget.isPresent() && moveTo(world, fullTarget.get(), scheduler)) {
             transform(world, scheduler, imageStore);
@@ -66,6 +70,16 @@ public class AlienFull extends Alien implements Transformed{
             }
             return false;
         }
+    }
+
+    public boolean transformScared(WorldModel world, EventScheduler scheduler, ImageStore imageStore){
+        AlienScared alien = Factory.createAlienScared(this.getId(), this.getPosition(), AlienScared.ALIEN_SCARED_ACTION_PERIOD, AlienScared.ALIEN_SCARED_ANIMATION_PERIOD, this.getResourceLimit(), imageStore.getImageList(ALIEN_KEY));
+
+        world.removeEntity(scheduler, this);
+
+        world.addEntity(alien);
+        alien.scheduleActions(scheduler, world, imageStore);
+        return true;
     }
 
 }

@@ -3,6 +3,9 @@ import processing.core.PImage;
 import java.util.List;
 
 public abstract class Alien extends EntityScheduling{
+    public static final String ALIEN_KEY = "alien";
+    public static final int ALIEN_ACTION_PERIOD = 1;
+    public static final int ALIEN_ANIMATION_PERIOD = 1;
     private int resourceLimit;
     private int resourceCount;
     public Alien(String id, Point position,

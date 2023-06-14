@@ -22,8 +22,8 @@ public class UFO extends OneCycleAnimations {
         } else {
             scheduler.unscheduleAllEvents(this);
             world.addEntity(this);
-            AlienNotFull alien = Factory.createAlienNotFull(Dude.ALIEN_KEY, this.getPosition(), Dude.ALIEN_ACTION_PERIOD,
-                    Dude.ALIEN_ANIMATION_PERIOD, 1, imageStore.getImageList(Dude.ALIEN_KEY));
+            AlienNotFull alien = Factory.createAlienNotFull(Alien.ALIEN_KEY, this.getPosition(), Alien.ALIEN_ACTION_PERIOD,
+                    Alien.ALIEN_ANIMATION_PERIOD, 1, imageStore.getImageList(Alien.ALIEN_KEY));
             world.addEntity(alien);
             alien.scheduleActions(scheduler, world, imageStore);
         }

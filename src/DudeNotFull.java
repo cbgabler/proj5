@@ -17,7 +17,7 @@ public class DudeNotFull extends Dude implements Transformed {
                              EventScheduler scheduler, ImageStore imageStore) {
         if (this.getHealth() <= 0){
             Entity brain = Factory.createBrain(Brain.BRAIN_KEY + "_" + this.getId(), this.getPosition(),
-                    imageStore.getImageList(Brain.BRAIN_KEY), Brain.BRAIN_ACTION_PERIOD, Brain.BRAIN_ANIMATION_PERIOD);
+                    imageStore.getImageList(Brain.BRAIN_KEY));
             world.removeEntity(scheduler, this);
             world.addEntity(brain);
             return true;

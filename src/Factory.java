@@ -39,11 +39,19 @@ public class Factory {
         return new AlienFull(id, position, actionPeriod, animationPeriod, resourceLimit, 0, images);
     }
 
+    public static AlienScared createAlienScared(String id, Point position, double actionPeriod, double animationPeriod, int resourceLimit, List<PImage> images) {
+        return new AlienScared(id, position, actionPeriod, animationPeriod, resourceLimit, 0, images);
+    }
+
     public static UFO createUFO(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod) {
         return new UFO(id, position, images, actionPeriod, animationPeriod, 0);
     }
 
-    public static Brain createBrain(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod) {
-        return new Brain(id, position, images, actionPeriod, animationPeriod, 0);
+    public static Brain createBrain(String id, Point position, List<PImage> images) {
+        return new Brain(id, position, images);
+    }
+
+    public static Ghost createGhost(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod) {
+        return new Ghost(id, position, images, actionPeriod, animationPeriod);
     }
 }

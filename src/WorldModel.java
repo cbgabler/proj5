@@ -114,6 +114,10 @@ public final class WorldModel {
         return this.background[pos.y][pos.x];
     }
 
+    public void setBackgroundCell(Point pos, Background background) {
+        this.background[pos.y][pos.x] = background;
+    }
+
     public Optional<PImage> getBackgroundImage(Point pos) {
         if (withinBounds(pos)) {
             return Optional.of(this.getCurrentImage(getBackgroundCell(pos)));

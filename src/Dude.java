@@ -8,9 +8,6 @@ abstract public class Dude extends EntityScheduling{
     public static final double DUDE_ANIMATION_PERIOD = 1;
     public static final int DUDE_LIMIT = 2;
     public static final int DUDE_NUM_PROPERTIES = 3;
-    public static final String ALIEN_KEY = "alien";
-    public static final int ALIEN_ACTION_PERIOD = 1;
-    public static final int ALIEN_ANIMATION_PERIOD = 1;
     protected int resourceLimit;
     protected int resourceCount;
     private int health;

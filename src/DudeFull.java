@@ -24,9 +24,8 @@ public class DudeFull extends Dude implements Transformed{
 
     public boolean transform(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
         if (this.getHealth() <= 0){
-            Entity brain = new Brain(Brain.BRAIN_KEY + "_" + this.getId(), this.getPosition(),
-                    imageStore.getImageList(Brain.BRAIN_KEY), Brain.BRAIN_ACTION_PERIOD, Brain.BRAIN_ANIMATION_PERIOD,
-                    0);
+            Entity brain = Factory.createBrain(Brain.BRAIN_KEY + "_" + this.getId(), this.getPosition(),
+                    imageStore.getImageList(Brain.BRAIN_KEY));
             world.removeEntity(scheduler, this);
             world.addEntity(brain);
             return true;

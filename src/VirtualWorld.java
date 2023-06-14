@@ -68,14 +68,44 @@ public final class VirtualWorld extends PApplet {
         Point pressed = mouseToPoint();
         System.out.println("CLICK! " + pressed.x + ", " + pressed.y);
 
+        Optional<Entity> entityOptional = world.getOccupant(pressed);
+        if (entityOptional.isPresent()) {
+            Entity entity = entityOptional.get();
+            System.out.println(entity.getId() + ": " + entity.getClass());
+        }
+
         if (world.isOccupied(pressed)) {
             System.out.println("Cannot place UFO here");
-        }
-        //need to add event in here to change background cells
-        UFO ufo = Factory.createUFO(UFO_KEY, pressed, imageStore.getImageList(UFO_KEY), .2, 0.4);
-        world.addEntity(ufo);
-        ufo.scheduleActions(scheduler, world, imageStore);
-        for (int i = pressed.y - 1; i >= 0; i--) {
+        } else {
+            //need to add event in here to change background cells
+            UFO ufo = Factory.createUFO(UFO_KEY, pressed, imageStore.getImageList(UFO_KEY), .2, 0.4);
+            world.addEntity(ufo);
+            ufo.scheduleActions(scheduler, world, imageStore);
+
+            int row = pressed.y;
+            int col = pressed.x;
+
+            for (int i = row - 1; i <= row + 1; i++) {
+                for (int j = col - 1; j <= col + 1; j++) {
+                    Point pt = new Point(j, i);
+                    world.setBackgroundCell(pt, new Background("rock", imageStore.getImageList("rock")));
+                    if (world.withinBounds(pt)) {
+                        if (world.isOccupied(pt) && (world.getOccupancyCell(pt) instanceof Dude || world.getOccupancyCell(pt) instanceof Fairy)) {
+                            world.removeEntityAt(pt);
+                            Ghost ghost = new Ghost(Ghost.GHOST_KEY, pt, imageStore.getImageList(Ghost.GHOST_KEY), Ghost.GHOST_ACTION_PERIOD, Ghost.GHOST_ANIMATION_PERIOD);
+                            world.addEntity(ghost);
+                            ghost.scheduleActions(scheduler, world, imageStore);
+
+                        } else if (world.isOccupied(pt) && (world.getOccupancyCell(pt) instanceof Tree || world.getOccupancyCell(pt) instanceof Sapling)) {
+                            world.removeEntityAt(pt);
+                            BurningTree bt = new BurningTree(BurningTree.BURNING_TREE_KEY, pt, imageStore.getImageList(BurningTree.BURNING_TREE_KEY),
+                                    BurningTree.BURNING_TREE_ACTION_PERIOD, BurningTree.BURNING_TREE_ANIMATION_PERIOD);
+                            world.addEntity(bt);
+                            bt.scheduleActions(scheduler, world, imageStore);
+                        }
+                    }
+                }
+            }
         }
     }
 
