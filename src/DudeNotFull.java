@@ -7,20 +7,17 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 
 public class DudeNotFull extends Dude implements Transformed {
-    private int health;
     public DudeNotFull(String id, Point position,
                        List<PImage> images,
                        double actionPeriod, double animationPeriod, int resourceLimit, int resourceCount, int health) {
-        super(id, position, images, actionPeriod, animationPeriod, resourceLimit, resourceCount);
-        this.health = health;
+        super(id, position, images, actionPeriod, animationPeriod, resourceLimit, resourceCount, health);
     }
 
     public boolean transform(WorldModel world,
                              EventScheduler scheduler, ImageStore imageStore) {
-        if (this.health <= 0){
-            Entity brain = new Brain(Brain.BRAIN_KEY + "_" + this.getId(), this.getPosition(),
-                    imageStore.getImageList(Brain.BRAIN_KEY), Brain.BRAIN_ACTION_PERIOD, Brain.BRAIN_ANIMATION_PERIOD,
-                    0);
+        if (this.getHealth() <= 0){
+            Entity brain = Factory.createBrain(Brain.BRAIN_KEY + "_" + this.getId(), this.getPosition(),
+                    imageStore.getImageList(Brain.BRAIN_KEY), Brain.BRAIN_ACTION_PERIOD, Brain.BRAIN_ANIMATION_PERIOD);
             world.removeEntity(scheduler, this);
             world.addEntity(brain);
             return true;
@@ -28,8 +25,8 @@ public class DudeNotFull extends Dude implements Transformed {
         if (this.getResourceCount() >= this.getResourceLimit()) {
 
             DudeFull dude = new DudeFull(this.getId(),
-                    this.getPosition(),
-                    this.getActionPeriod(), this.getAnimationPeriod(), this.getResourceLimit(), 0, this.getImages(), this.health);
+                    this.getPosition(), this.getImages(),
+                    this.getActionPeriod(), this.getAnimationPeriod(), this.getResourceLimit(), 0, getHealth());
 
             world.removeEntity(scheduler, this);
             scheduler.unscheduleAllEvents(this);
@@ -101,11 +98,5 @@ public class DudeNotFull extends Dude implements Transformed {
         }
     }
 
-    public int getHealth() {
-        return health;
-    }
-
-    public void subHealth() {
-        this.health--;
-    }
+    public void subHealth(){this.setHealth(this.getHealth() - 1);}
 }

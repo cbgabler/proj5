@@ -10,12 +10,10 @@ public class Obstacle extends EntityScheduling{
         super(id, position, images, actionPeriod, animationPeriod);
     }
 
-    @Override
     public void scheduleActions(EventScheduler scheduler, WorldModel world, ImageStore imageStore) {
         scheduler.scheduleEvent(this, createAnimationAction(0), this.getAnimationPeriod());
     }
 
-    @Override
     public void executeActivity(Entity entity, WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         throw new UnsupportedOperationException("Invalid function for type Obstacle : executeActivity");
     }

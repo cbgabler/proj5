@@ -70,11 +70,12 @@ public final class VirtualWorld extends PApplet {
 
         if (world.isOccupied(pressed)) {
             System.out.println("Cannot place UFO here");
-        } else {
-            //need to add event in here to change background cells
-            UFO ufo = Factory.createUFO(UFO_KEY, pressed, imageStore.getImageList(UFO_KEY), .2, 0.4);
-            world.addEntity(ufo);
-            ufo.scheduleActions(scheduler, world, imageStore);
+        }
+        //need to add event in here to change background cells
+        UFO ufo = Factory.createUFO(UFO_KEY, pressed, imageStore.getImageList(UFO_KEY), .2, 0.4);
+        world.addEntity(ufo);
+        ufo.scheduleActions(scheduler, world, imageStore);
+        for (int i = pressed.y - 1; i >= 0; i--) {
         }
     }
 

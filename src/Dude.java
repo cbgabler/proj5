@@ -13,13 +13,15 @@ abstract public class Dude extends EntityScheduling{
     public static final int ALIEN_ANIMATION_PERIOD = 1;
     protected int resourceLimit;
     protected int resourceCount;
+    private int health;
 
     public Dude(String id, Point position, List<PImage> images,
-                 double actionPeriod, double animationPeriod, int resourceLimit, int resourceCount)
+                 double actionPeriod, double animationPeriod, int resourceLimit, int resourceCount, int health)
     {
         super(id,position,images,actionPeriod,animationPeriod);
         this.resourceLimit = resourceLimit;
         this.resourceCount = resourceCount;
+        this.health = health;
     }
 
     public int getResourceLimit(){return resourceLimit;}
@@ -29,6 +31,8 @@ abstract public class Dude extends EntityScheduling{
 
     public abstract boolean moveTo(WorldModel world, Entity target, EventScheduler scheduler);
 
+    public abstract void subHealth();
+
     public static void parseDude(WorldModel world, String[] properties, Point pt, String id, ImageStore imageStore) {
         if (properties.length == DUDE_NUM_PROPERTIES) {
             Entity entity = new DudeNotFull(id, pt, imageStore.getImageList(DUDE_KEY), Double.parseDouble(properties[(int) DUDE_ACTION_PERIOD]), Double.parseDouble(properties[(int) DUDE_ANIMATION_PERIOD]), Integer.parseInt(properties[DUDE_LIMIT]), 0, 3);
@@ -36,5 +40,13 @@ abstract public class Dude extends EntityScheduling{
         } else {
             throw new IllegalArgumentException(String.format("%s requires %d properties when parsing", DUDE_KEY, DUDE_NUM_PROPERTIES));
         }
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 }

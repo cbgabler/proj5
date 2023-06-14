@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 
-public class AlienNotFull extends Dude implements Transformed{
+public class AlienNotFull extends Alien implements Transformed{
     public AlienNotFull(String id, Point position,
                      double actionPeriod, double animationPeriod, int resourceLimit, int resourceCount, List<PImage> images)
     {
-        super(id, position, images, actionPeriod, animationPeriod, resourceLimit, resourceCount);
+        super(id, position, actionPeriod, animationPeriod, resourceLimit, resourceCount, images);
     }
 
     public void executeActivity(Entity entity, WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
@@ -25,7 +25,7 @@ public class AlienNotFull extends Dude implements Transformed{
 
     public boolean transform(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
         AlienFull alien = Factory.createAlienFull(this.getId(), this.getPosition(),
-                this.getActionPeriod(), this.getAnimationPeriod(), this.resourceLimit, this.getImages());
+                this.getActionPeriod(), this.getAnimationPeriod(), this.getResourceLimit(), this.getImages());
 
         world.removeEntity(scheduler, this);
 
@@ -58,7 +58,7 @@ public class AlienNotFull extends Dude implements Transformed{
 
     public boolean moveTo(WorldModel world, Entity target, EventScheduler scheduler) {
         if (getPosition().adjacent(target.getPosition())) {
-            this.resourceCount += 1;
+            addResourceCount();
             if (target instanceof DudeFull) {
                 DudeFull dudeFull = (DudeFull) target;
                 dudeFull.subHealth();
